@@ -3,9 +3,12 @@ import math
 
 class Vector:
 
-    def __init__(self, dimension):
-        if type(dimension) == tuple and len(dimension) != 0:
-            self.vector = dimension
+    def __init__(self, *coordinate):
+        if len(coordinate) != 0:
+            for number in coordinate:
+                if type(number) not in (int, float):
+                    raise ValueError
+            self.vector = tuple(coordinate)
         else:
             raise ValueError
 
@@ -17,7 +20,9 @@ class Vector:
             result = []
             for i in range(len(self.vector)):
                 result.append(self.vector[i]+other.vector[i])
-            return Vector(tuple(result))
+            vec = Vector(0)
+            vec.vector = tuple(result)
+            return vec
 
         else:
             raise ValueError
@@ -42,7 +47,9 @@ class Vector:
             result = []
             for i in range(len(self.vector)):
                 result.append(self.vector[i]*other)
-            return Vector(tuple(result))
+            vec = Vector(0)
+            vec.vector = tuple(result)
+            return vec
         else:
             raise ValueError
 
@@ -54,7 +61,9 @@ class Vector:
             result = []
             for i in range(len(self.vector)):
                 result.append(self.vector[i] % other)
-            return Vector(tuple(result))
+            vec = Vector(0)
+            vec.vector = tuple(result)
+            return vec
         else:
             raise ValueError
 
@@ -73,10 +82,15 @@ class Vector:
             total += (self.vector[i]) ** 2
         return math.sqrt(total)
 
+    def renorm(self, new_norm):
+        if self.norm() == 0: return self
+        else:
+            return self*(1/self.norm())*new_norm
+
 
 if __name__ == "__main__":
-    vec1 = Vector((1, 1, 1))
-    vec2 = Vector((2, 2, 2))
-    vec2 += Vector((1, 2, 3))
+    vec1 = Vector(1, 1, 1)
+    vec2 = Vector(2, 2, 2)
+    vec2 += Vector(1, 2, 3)
     scal = 2.5
     print(vec2.dist(vec1))
